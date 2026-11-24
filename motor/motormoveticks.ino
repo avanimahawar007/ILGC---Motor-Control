@@ -149,13 +149,18 @@ void setup() {
     // MAIN LOOP (move till number of ticks achieved)
     // ======================================
 
-    while (encoder_get_count() < TARGET_TICKS) {
-        
+    while (encoder_get_count() != TARGET_TICKS) {
         int32_t current_ticks = encoder_get_count();
         int32_t difference = TARGET_TICKS - current_ticks;
-        int32_t speed = max((difference/TARGET_TICKS)*20, 5);
-        Serial.print("speed: ");
-        Serial.println(TARGET_TICKS);
+        int32_t speed;
+        if (difference>0) {
+            speed = (difference/(float)(TARGET_TICKS)*95.0f + 5.0f);
+        }
+        else{
+            speed = (difference/(float)(TARGET_TICKS)*95.0f - 5.0f);
+        }
+        //Serial.print("speed: ");
+        //Serial.println(TARGET_TICKS);
         motor_set_speed(speed); 
         //Serial.print(" L:");
         //Serial.print(0);
